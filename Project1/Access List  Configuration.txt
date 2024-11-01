@@ -1,0 +1,26 @@
+//Access List  Configuration in the Firewall
+//Interface Name: public,dmz,private
+
+! ICMP ACL
+access-list OUTSIDE-IN permit icmp any any
+access-list INSIDE-OUT permit icmp any any
+
+access-group OUTSIDE-IN in interface public
+access-group INSIDE-OUT out interface dmz
+
+! Inbound ACL for External Access (Public to DMZ)
+access-list OUTSIDE-TO-DMZ permit tcp any host 12.1.1.21 eq 53
+access-list OUTSIDE-TO-DMZ permit tcp any host 12.1.1.22 eq 80
+access-list OUTSIDE-TO-DMZ permit tcp any host 12.1.1.23 eq 25
+access-list OUTSIDE-TO-DMZ permit udp any host 12.1.1.24 eq 123
+
+access-group OUTSIDE-TO-DMZ in interface public
+
+! Outbound ACL for Internal Access (DMZ to Public)
+access-list DMZ-TO-OUTSIDE permit tcp host 12.1.1.21 eq 53 any
+access-list DMZ-TO-OUTSIDE permit tcp host 12.1.1.22 eq 80 any
+access-list DMZ-TO-OUTSIDE permit tcp host 12.1.1.23 eq 25 any
+access-list DMZ-TO-OUTSIDE permit tcp host 12.1.1.24 eq 123 any
+
+access-group DMZ-TO-OUTSIDE out interface dmz
+

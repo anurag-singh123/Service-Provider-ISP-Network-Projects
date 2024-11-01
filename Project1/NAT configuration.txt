@@ -1,0 +1,11 @@
+//ASA Firewall of Data Center
+
+! DMZ to Public NAT Configuration
+object network obj-dmz-nat
+subnet 12.1.1.0 255.255.255.0
+nat (dmz,public) dynamic interface
+
+! Public to DMZ NAT Configuration
+object network obj-public-nat
+subnet 10.0.0.0 255.255.255.0
+nat (public,dmz) dynamic interface
